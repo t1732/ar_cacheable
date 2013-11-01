@@ -11,9 +11,6 @@ module ArCacheable
         config.cache_store = Rails.cache
       end
     end
-
-    initializer "ar_cacheable.logger" do
-      ArCacheable.logger ||= Rails.logger
-    end
   end
+
 end
