@@ -1,6 +1,8 @@
 ar_cacheable
 ============
 
+[![Build Status](https://travis-ci.org/t1732/ar_cacheable.png?branch=master)](https://travis-ci.org/t1732/ar_cacheable)
+
 Cache of each ActiveRecord instance
 
 ## Installation
