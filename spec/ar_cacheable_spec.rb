@@ -8,7 +8,7 @@ ActiveRecord::Schema.define do
   end
 end
 
-ActiveRecord::Base.send(:include, ArCacheable)
+ActiveRecord::Base.send(:include, ArCacheable::Model)
 
 class UserNoCacheable < ActiveRecord::Base
 end
