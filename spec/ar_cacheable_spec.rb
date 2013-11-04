@@ -60,4 +60,10 @@ describe do
     end
   end
 
+  it "is not possible to cache the new record" do
+    expect{
+      model.new.cache.write(:foo, "test")
+    }.to raise_error(ArCacheable::CacheKeyError)
+  end
+
 end

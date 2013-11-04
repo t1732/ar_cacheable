@@ -5,7 +5,11 @@ module ArCacheable
     end
 
     def cache_key(key)
-      "#{@instance.class.name}-#{@instance.id}-#{key}"
+      if @instance.new_record?
+        raise CacheKeyError
+      else
+        [@instance.class.name, @instance.id, key].join(ArCacheable.config.cache_key_separater)
+      end
     end
 
     def [](key)
