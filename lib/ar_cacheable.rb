@@ -1,3 +1,4 @@
+require 'ar_cacheable/version'
 require 'ar_cacheable/config'
 require 'ar_cacheable/caching'
 
