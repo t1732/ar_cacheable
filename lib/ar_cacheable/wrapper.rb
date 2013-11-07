@@ -21,16 +21,27 @@ module ArCacheable
     end
 
     def read(key)
-      ArCacheable.config.cache_store.read(cache_key(key))
+      cache_store.read(cache_key(key))
     end
 
     def write(key, value, options = {})
-      ArCacheable.config.cache_store.write(cache_key(key), value, options)
+      cache_store.write(cache_key(key), value, options)
+    end
+
+    def delete(key)
+      cache_store.delete(cache_key(key))
     end
 
     def exist?(key)
-      ArCacheable.config.cache_store.exist?(cache_key(key))
+      cache_store.exist?(cache_key(key))
     end
+
+    private
+
+    def cache_store
+      ArCacheable.config.cache_store
+    end
+
   end
 
 end

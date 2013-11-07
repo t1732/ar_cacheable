@@ -26,7 +26,7 @@ end
 m = Model.find(params[:id])
 
 # write cache
-m.cache.write(:foo, "value")
+m.cache.write(:foo, "value", expires_in: 1.minute)
 or
 m.cache[:foo] = "value"
 
@@ -34,6 +34,9 @@ m.cache[:foo] = "value"
 m.cache.read(:foo)
 or
 m.cache[:foo]
+
+# delete cache
+m.cache.delete(:foo)
 
 # check if there is a cache
 m.cache.exist?(:foo)

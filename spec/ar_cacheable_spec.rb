@@ -39,6 +39,10 @@ describe do
       @instance.cache.write(:hoge, "(test)")
     end
 
+    it "can be delete" do
+      @instance.cache.delete(:hoge)
+    end
+
     it "can be read" do
       expect(@instance.cache.read(:hoge)).to be_nil
     end
