@@ -4,12 +4,6 @@ module ArCacheable
   module Caching
     extend ActiveSupport::Concern
 
-    included do
-      after_save do
-        cache[:last_changes] = changes
-      end
-    end
-
     module ClassMethods
       def ar_cacheable?
         true
@@ -23,6 +17,5 @@ module ArCacheable
     def last_changes
       cache[:last_changes]
     end
-
   end
 end

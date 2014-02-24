@@ -41,7 +41,5 @@ module ArCacheable
     def cache_store
       ArCacheable.config.cache_store
     end
-
   end
-
 end

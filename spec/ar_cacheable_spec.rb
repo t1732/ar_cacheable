@@ -10,16 +10,24 @@ end
 
 ActiveRecord::Base.send(:include, ArCacheable::Model)
 
-class UserNoCacheable < ActiveRecord::Base
+class User < ActiveRecord::Base
 end
 
-class User < ActiveRecord::Base
+class UserCachable < User
   ar_cacheable
 end
 
+class NoCacheable < User
+end
+
+class LastChangesNotCacned < User
+  ar_cacheable :last_changes => false
+end
+
 describe do
-  let(:no_cache_model) { UserNoCacheable }
-  let(:model) { User }
+  let(:no_cache_model) { NoCacheable }
+  let(:model) { UserCachable }
+  let(:last_changes_not_cached_model) { LastChangesNotCacned }
 
   # clean cache data
   before { ArCacheable.config.cache_store.clear }
@@ -60,6 +68,19 @@ describe do
       it do
         @instance.reload
         expect(@instance.last_changes).to eq({"name" => ["(name)", "(update)"]})
+        # expect(@instance.last_changes).to be_nil
+      end
+    end
+
+    context "not cached last_changes" do
+      before do
+        @instance = last_changes_not_cached_model.create(:name => "(name)")
+        @instance.update_attributes(:name => "(update)")
+      end
+
+      it do
+        @instance.reload
+        expect(@instance.last_changes).to be_nil
       end
     end
   end
@@ -69,5 +90,4 @@ describe do
       model.new.cache.write(:foo, "test")
     }.to raise_error(ArCacheable::CacheKeyError)
   end
-
 end

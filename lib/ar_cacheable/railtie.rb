@@ -12,5 +12,4 @@ module ArCacheable
       end
     end
   end
-
 end
