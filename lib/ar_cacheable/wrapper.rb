@@ -8,7 +8,7 @@ module ArCacheable
       if @instance.new_record?
         raise CacheKeyError
       else
-        [@instance.class.name, @instance.id, key].join(ArCacheable.config.cache_key_separater)
+        [@instance.class.name.underscore, @instance.id, key].join(ArCacheable.config.cache_key_separater)
       end
     end
 
