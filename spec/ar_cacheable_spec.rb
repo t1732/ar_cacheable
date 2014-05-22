@@ -5,6 +5,7 @@ ActiveRecord::Migration.verbose = false
 ActiveRecord::Schema.define do
   create_table :users, :force => true do |t|
     t.string :name
+    t.integer :age
   end
 end
 
@@ -20,14 +21,19 @@ end
 class NoCacheable < User
 end
 
-class LastChangesNotCacned < User
+class LastChangesNotCached < User
   ar_cacheable :last_changes => false
+end
+
+class TargettingCacned < User
+  ar_cacheable :last_changes => :name
 end
 
 describe do
   let(:no_cache_model) { NoCacheable }
   let(:model) { UserCachable }
-  let(:last_changes_not_cached_model) { LastChangesNotCacned }
+  let(:last_changes_not_cached_model) { LastChangesNotCached }
+  let(:targetting_model) { TargettingCacned }
 
   # clean cache data
   before { ArCacheable.config.cache_store.clear }
@@ -63,24 +69,36 @@ describe do
     end
 
     context "cached changes" do
-      before { @instance.update_attributes(:name => "(update)") }
+      before { @instance.update(:name => "(update)", :age => 20)}
 
       it do
         @instance.reload
-        expect(@instance.last_changes).to eq({"name" => ["(name)", "(update)"]})
-        # expect(@instance.last_changes).to be_nil
+        expect(@instance.last_changes).to eq({ "name" => ["(name)", "(update)"], "age" => [nil, 20] })
       end
     end
 
     context "not cached last_changes" do
       before do
         @instance = last_changes_not_cached_model.create(:name => "(name)")
-        @instance.update_attributes(:name => "(update)")
+        @instance.update(:name => "(update)")
       end
 
       it do
         @instance.reload
         expect(@instance.last_changes).to be_nil
+      end
+    end
+
+
+    context "cached last_changes only target column" do
+      before do
+        @instance = targetting_model.create(:name => "(name)", :age => 20)
+        @instance.update(:name => "(update)", :age => 30)
+      end
+
+      it do
+        @instance.reload
+        expect(@instance.last_changes).to eq({ "name" => ["(name)", "(update)"] })
       end
     end
   end

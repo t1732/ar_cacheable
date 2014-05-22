@@ -43,9 +43,21 @@ m.cache.exist?(:foo)
 
 # changes cache
 m.name # => "name"
-m.update_attributes(:name => "update")
+m.age  # => 20
+m.update(:name => "update", :age => 30)
 m.reload
 
-m.last_changes # => {"name" => ["name", "update"]}
+m.last_changes # => { "name" => ["name", "update"], "age" => [20, 30] }
+
+# caching only target column
+
+  ar_cacheable :last_changes => :age
+
+m.name # => "name"
+m.age  # => 20
+m.update(:name => "update", :age => 30)
+m.reload
+
+m.last_changes # => { "age" => [20, 30] }
 
 ```
