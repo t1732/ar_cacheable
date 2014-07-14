@@ -4,7 +4,7 @@ module ArCacheable
 
     included do
       after_save do
-        cache[:last_changes] = changed_cache
+        cache.write(:last_changes, changed_cache, expires_in: ArCacheable.config.last_changes_expire)
       end
 
       def changed_cache
