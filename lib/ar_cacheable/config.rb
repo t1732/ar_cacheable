@@ -7,5 +7,6 @@ module ArCacheable
   config_accessor :cache_store, :cache_key_separater
   config.cache_store = ActiveSupport::Cache::MemoryStore.new
   config.cache_key_separater = ":"
-  config.last_changes_expire = 1.minute
+  config.cache_expire        = 5.minutes
+  config.last_changes_expire = 5.minutes
 end

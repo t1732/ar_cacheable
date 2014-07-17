@@ -17,7 +17,7 @@ module ArCacheable
     end
 
     def []=(key, value)
-      write(key, value)
+      write(key, value, expire_in: ArCacheable.config.cache_expire)
     end
 
     def read(key)
